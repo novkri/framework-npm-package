@@ -8,6 +8,7 @@ const GenerateJSON_1 = require("./GenerateJSON");
 const ActionStartProcessing_1 = require("../ActionResponses/ActionStartProcessing");
 const Observer_1 = require("./SocketConnection/Observer");
 const GlobalVariables_1 = require("../../GlobalVariables");
+const helpers_1 = require("../../helpers");
 const stomp_js_1 = require("stompjs/lib/stomp.js");
 const observer = Observer_1.EventObserver.getInstance();
 let client;
@@ -120,7 +121,7 @@ class SocketRequest {
         });
     }
     refreshToken() {
-        let currentToken = GlobalVariables_1.decipherJWT(GlobalVariables_1.GlobalVariables.tokenUST);
+        let currentToken = helpers_1.decipherJWT(GlobalVariables_1.GlobalVariables.tokenUST);
         let tokenExpirationTime = currentToken.alive_until;
     }
 }

@@ -2,7 +2,8 @@ import axios, {Method} from 'axios';
 import {ActionResult} from '../ActionResponses/ActionResult';
 import {ActionError} from '../ActionResponses/ActionError';
 import {ActionParameters} from '../Interfaces/ActionParameters';
-import {deleteCookie, getCookie, GlobalVariables, setCookie} from '../../GlobalVariables';
+import {GlobalVariables} from '../../GlobalVariables';
+import {deleteCookie, getCookie, setCookie} from '../../helpers'
 import {ParametersInterface} from "./ParametersInterface";
 
 

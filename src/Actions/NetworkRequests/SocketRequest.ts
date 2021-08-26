@@ -6,7 +6,8 @@ import {ActionError} from '../ActionResponses/ActionError';
 import {GenerateJSON} from './GenerateJSON';
 import {ActionStartProcessing} from '../ActionResponses/ActionStartProcessing';
 import {EventObserver} from './SocketConnection/Observer';
-import {GlobalVariables, getCookie, decipherJWT} from '../../GlobalVariables';
+import {GlobalVariables} from '../../GlobalVariables';
+import {getCookie, decipherJWT} from '../../helpers'
 import {Stomp} from 'stompjs/lib/stomp.js'
 
 const observer:EventObserver = EventObserver.getInstance();

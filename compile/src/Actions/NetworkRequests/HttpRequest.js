@@ -8,6 +8,7 @@ const axios_1 = __importDefault(require("axios"));
 const ActionResult_1 = require("../ActionResponses/ActionResult");
 const ActionError_1 = require("../ActionResponses/ActionError");
 const GlobalVariables_1 = require("../../GlobalVariables");
+const helpers_1 = require("../../helpers");
 // let isRefreshing = false;
 // let refreshSubscribers: any[] = [];
 class HttpRequest {
@@ -53,7 +54,7 @@ class HttpRequest {
         let userTokenName = tokenName ? tokenName : GlobalVariables_1.GlobalVariables.tokenUST;
         const instance = axios_1.default.create({
             headers: {
-                'Authorization': GlobalVariables_1.getCookie(userTokenName)
+                'Authorization': helpers_1.getCookie(userTokenName)
             }
         });
         // instance.interceptors.response.use(response => {
