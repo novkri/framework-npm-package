@@ -14,8 +14,6 @@ jobs:
       - run: |
           PACKAGE_VERSION="${GITHUB_REF##*/v}"
           PACKAGE_VERSION="${PACKAGE_VERSION%-react-native}"
-          echo "${PACKAGE_VERSION}"
-          exit 1
           sed -i -e "0,/{/ s/{/{\n\t\"version\": \"${PACKAGE_VERSION}\",/" package.json
           cat package.json
           exit 1
