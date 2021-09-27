@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SocketRequest = void 0;
+require("react-native-get-random-values");
 const uuid_1 = require("uuid");
 const ActionResult_1 = require("../ActionResponses/ActionResult");
 const ActionError_1 = require("../ActionResponses/ActionError");
@@ -75,9 +76,9 @@ class SocketRequest {
                             observer.broadcast(receivedItems, actionName, modelName);
                         }
                         else if (result.type === 'action_error') {
-                            if (result.message === 'Token expired!') {
-                                this.refreshToken();
-                            }
+                            // if(result.message === 'Token expired!') {
+                            //     this.refreshToken()
+                            // }
                             const actionError = new ActionError_1.ActionError(result.message, result.code).getMessage();
                             observer.broadcast(actionError, 'error', modelName);
                         }
@@ -118,10 +119,6 @@ class SocketRequest {
         client.disconnect(() => {
             observer.broadcast(`${this.modelName} disconnected`, 'disconnect', this.modelName);
         });
-    }
-    refreshToken() {
-        let currentToken = GlobalVariables_1.decipherJWT(GlobalVariables_1.GlobalVariables.tokenUST);
-        let tokenExpirationTime = currentToken.alive_until;
     }
 }
 exports.SocketRequest = SocketRequest;

@@ -1,3 +1,4 @@
+import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
 import {ActionParameters} from '../Interfaces/ActionParameters';
 import {RoutingKeyParams} from "../Interfaces/RoutingKeyParams";
@@ -117,9 +118,9 @@ export class SocketRequest {
                             receivedItems = actionResult.getData();
                             observer.broadcast(receivedItems, actionName, modelName);
                         } else if (result.type === 'action_error') {
-                            if(result.message === 'Token expired!') {
-                                this.refreshToken()
-                            }
+                            // if(result.message === 'Token expired!') {
+                            //     this.refreshToken()
+                            // }
                             const actionError = new ActionError(result.message, result.code).getMessage();
                             observer.broadcast(actionError, 'error', modelName);
                         }
@@ -159,9 +160,9 @@ export class SocketRequest {
             observer.broadcast(`${this.modelName} disconnected`, 'disconnect', this.modelName);
         });
     }
-
-    refreshToken(){
-        let currentToken = decipherJWT(GlobalVariables.tokenUST)
-        let tokenExpirationTime = currentToken.alive_until
-    }
+    //
+    // refreshToken(){
+    //     let currentToken = decipherJWT(GlobalVariables.tokenUST)
+    //     let tokenExpirationTime = currentToken.alive_until
+    // }
 }

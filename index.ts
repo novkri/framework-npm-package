@@ -14,6 +14,7 @@ import {Model} from "./src/Model/Model";
 import {GlobalVariables} from "./src/GlobalVariables";
 import {EgalConstructor} from "./src/Model/EgalConstructor";
 import {EgalAuthConstructor} from './src/Model/AuthConstructor'
+import {ReactConstructor} from "./src/Model/ReactConstructor";
 
 export default {
     AuthAction,
@@ -31,7 +32,8 @@ export default {
     Model,
     GlobalVariables,
     EgalConstructor,
-    EgalAuthConstructor
+    EgalAuthConstructor,
+    ReactConstructor
 }
 
 export {
@@ -50,5 +52,6 @@ export {
     Model,
     GlobalVariables,
     EgalConstructor,
-    EgalAuthConstructor
+    EgalAuthConstructor,
+    ReactConstructor
 }
