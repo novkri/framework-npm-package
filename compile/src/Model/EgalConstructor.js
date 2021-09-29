@@ -12,6 +12,7 @@ class EgalConstructor extends Model_1.Model {
         this.password = modelParams.password;
         this.url = modelParams.url;
         this.connectionType = modelParams.connectionType;
+        this.listenerFunction = modelParams.listenerFunction;
         this.egalModel = new Model_1.Model(this.modelName, this.userName, this.password);
         this.initModel();
     }
@@ -20,18 +21,9 @@ class EgalConstructor extends Model_1.Model {
         return this.egalModel;
     }
     initModelObserver() {
-        return new Promise((resolve, reject) => {
-            this.egalObserver.subscribe(this.modelName, (data, actionName, modelName, actionMessage) => {
-                let receivedData;
-                if (actionName !== 'error') {
-                    receivedData = [data[0], actionName, modelName, actionMessage];
-                    resolve(receivedData);
-                }
-                else {
-                    receivedData = [data[0], actionName, modelName, actionMessage];
-                    reject(receivedData);
-                }
-            });
+        this.egalObserver.subscribe(this.modelName, (data, actionName, modelName, actionMessage) => {
+            const receivedData = [data[0], actionName, modelName, actionMessage];
+            this.listenerFunction(receivedData);
         });
     }
 }

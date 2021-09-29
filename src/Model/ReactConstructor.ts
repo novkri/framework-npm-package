@@ -17,7 +17,6 @@ export class ReactConstructor extends Model {
     password: string;
     url: string;
     connectionType: string;
-    tokenName: string;
     listenerFunction: Function;
   }) {
     super(
