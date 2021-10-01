@@ -24,7 +24,8 @@ export const setCookie = async function (name: string, token: string) {
 export const getCookie = function (cname: string) {
   if (cname !== undefined) {
     try {
-      return storage.getString(cname);
+      const token = storage.getString(cname);
+      return token === undefined ? '' : token
     } catch (error) {
       return error
     }

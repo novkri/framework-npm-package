@@ -25,7 +25,8 @@ exports.setCookie = setCookie;
 const getCookie = function (cname) {
     if (cname !== undefined) {
         try {
-            return MMKVStorage_1.default.getString(cname);
+            const token = MMKVStorage_1.default.getString(cname);
+            return token === undefined ? '' : token;
         }
         catch (error) {
             return error;
