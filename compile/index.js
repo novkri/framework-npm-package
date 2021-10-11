@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ActionConstructor = exports.ReactConstructor = exports.EgalAuthConstructor = exports.EgalConstructor = exports.GlobalVariables = exports.Model = exports.ActionMessage = exports.HttpRequest = exports.EventObserver = exports.CustomAction = exports.CRUDAction = exports.GetModelMetadataAction = exports.GetAllMetaDataAction = exports.GetItemsFilterParams = exports.GetItemsSortingParams = exports.GetItemsAction = exports.AuthAction = void 0;
+exports.ActionConstructor = exports.EgalAuthConstructor = exports.EgalConstructor = exports.GlobalVariables = exports.Model = exports.ActionMessage = exports.SocketRequest = exports.HttpRequest = exports.EventObserver = exports.CustomAction = exports.CRUDAction = exports.GetModelMetadataAction = exports.GetAllMetaDataAction = exports.GetItemsFilterParams = exports.GetItemsSortingParams = exports.GetItemsAction = exports.AuthAction = void 0;
 const AuthAction_1 = require("./src/Auth/AuthAction");
 Object.defineProperty(exports, "AuthAction", { enumerable: true, get: function () { return AuthAction_1.AuthAction; } });
 const GetItemsAction_1 = require("./src/Actions/GetItemsAction/GetItemsAction");
@@ -21,20 +21,20 @@ const Observer_1 = require("./src/Actions/NetworkRequests/SocketConnection/Obser
 Object.defineProperty(exports, "EventObserver", { enumerable: true, get: function () { return Observer_1.EventObserver; } });
 const HttpRequest_1 = require("./src/Actions/NetworkRequests/HttpRequest");
 Object.defineProperty(exports, "HttpRequest", { enumerable: true, get: function () { return HttpRequest_1.HttpRequest; } });
+const SocketRequest_1 = require("./src/Actions/NetworkRequests/SocketRequest");
+Object.defineProperty(exports, "SocketRequest", { enumerable: true, get: function () { return SocketRequest_1.SocketRequest; } });
 const ActionMessage_1 = require("./src/Actions/ActionMessage");
 Object.defineProperty(exports, "ActionMessage", { enumerable: true, get: function () { return ActionMessage_1.ActionMessage; } });
 const Model_1 = require("./src/Model/Model");
 Object.defineProperty(exports, "Model", { enumerable: true, get: function () { return Model_1.Model; } });
 const GlobalVariables_1 = require("./src/GlobalVariables");
 Object.defineProperty(exports, "GlobalVariables", { enumerable: true, get: function () { return GlobalVariables_1.GlobalVariables; } });
-const EgalConstructor_1 = require("./src/Model/EgalConstructor");
+const EgalConstructor_1 = require("./src/Constructors/EgalConstructor");
 Object.defineProperty(exports, "EgalConstructor", { enumerable: true, get: function () { return EgalConstructor_1.EgalConstructor; } });
-const AuthConstructor_1 = require("./src/Model/AuthConstructor");
+const AuthConstructor_1 = require("./src/Constructors/AuthConstructor");
 Object.defineProperty(exports, "EgalAuthConstructor", { enumerable: true, get: function () { return AuthConstructor_1.EgalAuthConstructor; } });
-const ActionConstructor_1 = require("./src/Actions/ActionConstructor");
+const ActionConstructor_1 = require("./src/Constructors/ActionConstructor");
 Object.defineProperty(exports, "ActionConstructor", { enumerable: true, get: function () { return ActionConstructor_1.ActionConstructor; } });
-const ReactConstructor_1 = require("./src/Model/ReactConstructor");
-Object.defineProperty(exports, "ReactConstructor", { enumerable: true, get: function () { return ReactConstructor_1.ReactConstructor; } });
 exports.default = {
     AuthAction: AuthAction_1.AuthAction,
     GetItemsAction: GetItemsAction_1.GetItemsAction,
@@ -46,11 +46,11 @@ exports.default = {
     CustomAction: CustomAction_1.CustomAction,
     EventObserver: Observer_1.EventObserver,
     HttpRequest: HttpRequest_1.HttpRequest,
+    SocketRequest: SocketRequest_1.SocketRequest,
     ActionMessage: ActionMessage_1.ActionMessage,
     Model: Model_1.Model,
     GlobalVariables: GlobalVariables_1.GlobalVariables,
     EgalConstructor: EgalConstructor_1.EgalConstructor,
     EgalAuthConstructor: AuthConstructor_1.EgalAuthConstructor,
-    ReactConstructor: ReactConstructor_1.ReactConstructor,
     ActionConstructor: ActionConstructor_1.ActionConstructor,
 };

@@ -1,5 +1,6 @@
 import { Method } from "axios";
 import { HttpRequest } from "../Actions/NetworkRequests/HttpRequest";
+import { SocketRequest } from "../Actions/NetworkRequests/SocketRequest";
 import { AuthParams } from "./AuthParams";
 import { GlobalVariables } from "../GlobalVariables";
 import { ActionParameters } from "../Actions/Interfaces/ActionParameters";
@@ -14,11 +15,14 @@ export class AuthAction {
   private httpMethod: Method;
   private httpRequest: HttpRequest;
   private requestAction: string;
-  constructor(modelName: string) {
+  private readonly requestType: string;
+
+  constructor(modelName: string, requestType: string) {
     this.microserviceName = "auth";
     this.modelName = modelName;
     this.httpMethod = "POST";
     this.requestAction = "";
+    this.requestType = requestType;
     this.httpRequest = new HttpRequest();
   }
 
@@ -41,25 +45,35 @@ export class AuthAction {
   ) {
     return new Promise((resolve, reject) => {
       let authParams = new AuthParams().setAuthParams(userData);
-      this.httpRequest
-        .axiosConnect(
-          this.microserviceName,
-          this.modelName,
-          requestType,
-          this.httpMethod,
-          authParams,
-          tokenName
-        )
-        .then((response: any) => {
-          let action = response.data.action.action_name;
-          let items = response.data.action_result.data;
-          let returnItems = [items, action, this.modelName];
-          resolve(returnItems);
-        })
-        .catch((error) => {
-          let returnError = [error, "error", this.modelName];
-          reject(returnError);
-        });
+      let socketRequest = new SocketRequest(
+        this.microserviceName,
+        requestType,
+        this.modelName,
+        authParams
+      );
+      if (this.requestType === "socket") {
+        socketRequest.initSocketConnect();
+      } else {
+        this.httpRequest
+          .axiosConnect(
+            this.microserviceName,
+            this.modelName,
+            requestType,
+            this.httpMethod,
+            authParams,
+            tokenName
+          )
+          .then((response: any) => {
+            let action = response.data.action.action_name;
+            let items = response.data.action_result.data;
+            let returnItems = [items, action, this.modelName];
+            resolve(returnItems);
+          })
+          .catch((error) => {
+            let returnError = [error, "error", this.modelName];
+            reject(returnError);
+          });
+      }
     });
   }
 
@@ -78,7 +92,8 @@ export class AuthAction {
   authUser(createdUserData: ActionParameters | undefined) {
     return new Promise((resolve, reject) => {
       this.setNetworkRequest(createdUserData, auth)
-        .then((data) => {
+        .then((data: any) => {
+          sessionStorage.setItem("umt", data[0]);
           resolve(data);
         })
         .catch((error) => {
@@ -90,7 +105,7 @@ export class AuthAction {
   loginToService(userCred: ActionParameters | undefined, tokenName?: string) {
     return new Promise((resolve, reject) => {
       this.setNetworkRequest(userCred, loginIntoService, tokenName)
-        .then((data) => {
+        .then((data: any) => {
           resolve(data);
         })
         .catch((error) => {

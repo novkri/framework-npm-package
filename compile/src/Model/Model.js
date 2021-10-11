@@ -253,7 +253,9 @@ class Model {
      * @param URL
      * @param connectionType
      */
-    setBaseUrl(URL) {
+    setBaseUrl(URL, connectionType) {
+        if (connectionType === "socket")
+            GlobalVariables_1.GlobalVariables.socketBaseUrl = URL;
         GlobalVariables_1.GlobalVariables.httpBaseUrl = URL;
     }
     socketDisconnect() {

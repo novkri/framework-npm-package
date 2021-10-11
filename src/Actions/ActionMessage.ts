@@ -1,6 +1,7 @@
 import { Method } from "axios";
 import { ActionParameters } from "./Interfaces/ActionParameters";
 import { HttpRequest } from "./NetworkRequests/HttpRequest";
+import { SocketRequest } from "./NetworkRequests/SocketRequest";
 import { ActionMessageInterface } from "./Interfaces/ActionMessageInterface";
 import { EventObserver } from "./NetworkRequests/SocketConnection/Observer";
 import { RoutingKeyParams } from "./Interfaces/RoutingKeyParams";
@@ -13,6 +14,7 @@ export class ActionMessage implements ActionMessageInterface {
   actionName: string;
   httpMethod: Method;
   httpRequest: HttpRequest;
+  socketRequest: SocketRequest;
   channelParameters: RoutingKeyParams;
   actionParameters?: ActionParameters;
 
@@ -30,6 +32,13 @@ export class ActionMessage implements ActionMessageInterface {
     this.channelParameters = channelParameters;
     this.httpMethod = "POST";
     this.httpRequest = new HttpRequest();
+    this.socketRequest = new SocketRequest(
+      this.serviceName,
+      this.actionName,
+      this.modelName,
+      this.actionParameters,
+      this.channelParameters
+    );
   }
 
   axiosConnect(constructorRequest?: boolean) {
@@ -57,5 +66,9 @@ export class ActionMessage implements ActionMessageInterface {
             : observer.broadcast(error, "error", this.modelName);
         });
     });
+  }
+
+  socketConnect() {
+    this.socketRequest.initSocketConnect();
   }
 }
