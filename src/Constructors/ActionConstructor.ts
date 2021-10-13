@@ -171,6 +171,11 @@ export class ActionConstructor implements ActionConstructorInterface {
     return this;
   }
   call() {
+    this.filterArr = [];
+    this.ordersArr = [];
+    this.withsArr = [];
+    this.pagination = { per_page: undefined, page: undefined };
+    this.id = "";
     return new Promise((resolve, reject) => {
       let result;
       let actionParameters = {

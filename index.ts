@@ -8,13 +8,13 @@ import { CRUDAction } from "./src/Actions/CRUDActions/CRUDAction";
 import { CustomAction } from "./src/Actions/CustomAction/CustomAction";
 import { EventObserver } from "./src/Actions/NetworkRequests/SocketConnection/Observer";
 import { HttpRequest } from "./src/Actions/NetworkRequests/HttpRequest";
-import { SocketRequest } from "./src/Actions/NetworkRequests/SocketRequest";
 import { ActionMessage } from "./src/Actions/ActionMessage";
 import { Model } from "./src/Model/Model";
 import { GlobalVariables } from "./src/GlobalVariables";
 import { EgalConstructor } from "./src/Constructors/EgalConstructor";
 import { EgalAuthConstructor } from "./src/Constructors/AuthConstructor";
 import { ActionConstructor } from "./src/Constructors/ActionConstructor";
+import { ReactConstructor } from "./src/Model/ReactConstructor";
 
 export default {
   AuthAction,
@@ -27,13 +27,13 @@ export default {
   CustomAction,
   EventObserver,
   HttpRequest,
-  SocketRequest,
   ActionMessage,
   Model,
   GlobalVariables,
   EgalConstructor,
   EgalAuthConstructor,
   ActionConstructor,
+  ReactConstructor,
 };
 
 export {
@@ -47,11 +47,11 @@ export {
   CustomAction,
   EventObserver,
   HttpRequest,
-  SocketRequest,
   ActionMessage,
   Model,
   GlobalVariables,
   EgalConstructor,
   EgalAuthConstructor,
   ActionConstructor,
+  ReactConstructor,
 };

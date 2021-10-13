@@ -1,6 +1,5 @@
 import { Method } from "axios";
 import { HttpRequest } from "../Actions/NetworkRequests/HttpRequest";
-import { SocketRequest } from "../Actions/NetworkRequests/SocketRequest";
 import { AuthParams } from "./AuthParams";
 import { GlobalVariables } from "../GlobalVariables";
 import { ActionParameters } from "../Actions/Interfaces/ActionParameters";
@@ -45,35 +44,25 @@ export class AuthAction {
   ) {
     return new Promise((resolve, reject) => {
       let authParams = new AuthParams().setAuthParams(userData);
-      let socketRequest = new SocketRequest(
-        this.microserviceName,
-        requestType,
-        this.modelName,
-        authParams
-      );
-      if (this.requestType === "socket") {
-        socketRequest.initSocketConnect();
-      } else {
-        this.httpRequest
-          .axiosConnect(
-            this.microserviceName,
-            this.modelName,
-            requestType,
-            this.httpMethod,
-            authParams,
-            tokenName
-          )
-          .then((response: any) => {
-            let action = response.data.action.action_name;
-            let items = response.data.action_result.data;
-            let returnItems = [items, action, this.modelName];
-            resolve(returnItems);
-          })
-          .catch((error) => {
-            let returnError = [error, "error", this.modelName];
-            reject(returnError);
-          });
-      }
+      this.httpRequest
+        .axiosConnect(
+          this.microserviceName,
+          this.modelName,
+          requestType,
+          this.httpMethod,
+          authParams,
+          tokenName
+        )
+        .then((response: any) => {
+          let action = response.data.action.action_name;
+          let items = response.data.action_result.data;
+          let returnItems = [items, action, this.modelName];
+          resolve(returnItems);
+        })
+        .catch((error) => {
+          let returnError = [error, "error", this.modelName];
+          reject(returnError);
+        });
     });
   }
 
@@ -93,7 +82,7 @@ export class AuthAction {
     return new Promise((resolve, reject) => {
       this.setNetworkRequest(createdUserData, auth)
         .then((data: any) => {
-          sessionStorage.setItem("umt", data[0]);
+          // sessionStorage.setItem("umt", data[0]);
           resolve(data);
         })
         .catch((error) => {

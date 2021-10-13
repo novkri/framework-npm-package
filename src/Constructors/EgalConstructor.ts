@@ -29,7 +29,7 @@ export class EgalConstructor extends Model {
   }
 
   initModel() {
-    this.egalModel.setBaseUrl(this.url, this.connectionType);
+    this.egalModel.setBaseUrl(this.url);
     return this.egalModel;
   }
   initModelObserver() {

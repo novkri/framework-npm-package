@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EgalConstructor = void 0;
-const Model_1 = require("./Model");
+const Model_1 = require("../Model/Model");
 const Observer_1 = require("../Actions/NetworkRequests/SocketConnection/Observer");
 class EgalConstructor extends Model_1.Model {
     constructor(modelParams) {
@@ -16,7 +16,7 @@ class EgalConstructor extends Model_1.Model {
         this.initModel();
     }
     initModel() {
-        this.egalModel.setBaseUrl(this.url, this.connectionType);
+        this.egalModel.setBaseUrl(this.url);
         return this.egalModel;
     }
     initModelObserver() {
