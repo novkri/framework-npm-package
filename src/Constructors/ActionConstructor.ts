@@ -34,6 +34,13 @@ export class ActionConstructor implements ActionConstructorInterface {
   setBaseUrl(url: string) {
     GlobalVariables.httpBaseUrl = url;
   }
+  clearParams() {
+    this.filterArr = [];
+    this.ordersArr = [];
+    this.withsArr = [];
+    this.pagination = { per_page: undefined, page: undefined };
+    this.id = "";
+  }
   getMetadata(microserviceName: string, modelName: string): this {
     this.microserviceName = microserviceName;
     this.modelName = modelName;
@@ -41,6 +48,7 @@ export class ActionConstructor implements ActionConstructorInterface {
     return this;
   }
   getItems(microserviceName: string, modelName: string): this {
+    this.clearParams();
     this.microserviceName = microserviceName;
     this.modelName = modelName;
     this.actionName = "getItems";
@@ -51,6 +59,7 @@ export class ActionConstructor implements ActionConstructorInterface {
     modelName: string,
     id: string | number
   ): this {
+    this.clearParams();
     this.microserviceName = microserviceName;
     this.modelName = modelName;
     this.actionName = "getItem";
@@ -140,6 +149,7 @@ export class ActionConstructor implements ActionConstructorInterface {
     actionName: string,
     actionParams: object
   ): this {
+    this.clearParams();
     this.microserviceName = microserviceName;
     this.modelName = modelName;
     this.actionParams = actionParams;
@@ -147,6 +157,7 @@ export class ActionConstructor implements ActionConstructorInterface {
     return this;
   }
   getCount(microserviceName: string, modelName: string): this {
+    this.clearParams();
     this.microserviceName = microserviceName;
     this.modelName = modelName;
     this.actionName = "getCount";
@@ -171,11 +182,6 @@ export class ActionConstructor implements ActionConstructorInterface {
     return this;
   }
   call() {
-    this.filterArr = [];
-    this.ordersArr = [];
-    this.withsArr = [];
-    this.pagination = { per_page: undefined, page: undefined };
-    this.id = "";
     return new Promise((resolve, reject) => {
       let result;
       let actionParameters = {
