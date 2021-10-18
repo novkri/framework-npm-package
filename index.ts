@@ -15,7 +15,7 @@ import { EgalConstructor } from "./src/Constructors/EgalConstructor";
 import { EgalAuthConstructor } from "./src/Constructors/AuthConstructor";
 import { ActionConstructor } from "./src/Constructors/ActionConstructor";
 import { ReactConstructor } from "./src/Model/ReactConstructor";
-
+import { ValidationConstructor } from "./src/Constructors/ValidationConstructor";
 export default {
   AuthAction,
   GetItemsAction,
@@ -34,6 +34,7 @@ export default {
   EgalAuthConstructor,
   ActionConstructor,
   ReactConstructor,
+  ValidationConstructor,
 };
 
 export {
@@ -54,4 +55,5 @@ export {
   EgalAuthConstructor,
   ActionConstructor,
   ReactConstructor,
+  ValidationConstructor,
 };

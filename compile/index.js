@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ReactConstructor = exports.ActionConstructor = exports.EgalAuthConstructor = exports.EgalConstructor = exports.GlobalVariables = exports.Model = exports.ActionMessage = exports.HttpRequest = exports.EventObserver = exports.CustomAction = exports.CRUDAction = exports.GetModelMetadataAction = exports.GetAllMetaDataAction = exports.GetItemsFilterParams = exports.GetItemsSortingParams = exports.GetItemsAction = exports.AuthAction = void 0;
+exports.ValidationConstructor = exports.ReactConstructor = exports.ActionConstructor = exports.EgalAuthConstructor = exports.EgalConstructor = exports.GlobalVariables = exports.Model = exports.ActionMessage = exports.HttpRequest = exports.EventObserver = exports.CustomAction = exports.CRUDAction = exports.GetModelMetadataAction = exports.GetAllMetaDataAction = exports.GetItemsFilterParams = exports.GetItemsSortingParams = exports.GetItemsAction = exports.AuthAction = void 0;
 const AuthAction_1 = require("./src/Auth/AuthAction");
 Object.defineProperty(exports, "AuthAction", { enumerable: true, get: function () { return AuthAction_1.AuthAction; } });
 const GetItemsAction_1 = require("./src/Actions/GetItemsAction/GetItemsAction");
@@ -35,6 +35,8 @@ const ActionConstructor_1 = require("./src/Constructors/ActionConstructor");
 Object.defineProperty(exports, "ActionConstructor", { enumerable: true, get: function () { return ActionConstructor_1.ActionConstructor; } });
 const ReactConstructor_1 = require("./src/Model/ReactConstructor");
 Object.defineProperty(exports, "ReactConstructor", { enumerable: true, get: function () { return ReactConstructor_1.ReactConstructor; } });
+const ValidationConstructor_1 = require("./src/Constructors/ValidationConstructor");
+Object.defineProperty(exports, "ValidationConstructor", { enumerable: true, get: function () { return ValidationConstructor_1.ValidationConstructor; } });
 exports.default = {
     AuthAction: AuthAction_1.AuthAction,
     GetItemsAction: GetItemsAction_1.GetItemsAction,
@@ -53,4 +55,5 @@ exports.default = {
     EgalAuthConstructor: AuthConstructor_1.EgalAuthConstructor,
     ActionConstructor: ActionConstructor_1.ActionConstructor,
     ReactConstructor: ReactConstructor_1.ReactConstructor,
+    ValidationConstructor: ValidationConstructor_1.ValidationConstructor,
 };
