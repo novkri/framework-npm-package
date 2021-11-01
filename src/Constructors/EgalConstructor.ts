@@ -1,14 +1,14 @@
-import { Model } from "../Model/Model";
-import { EventObserver } from "../Actions/NetworkRequests/SocketConnection/Observer";
+import { Model } from '../Model/Model';
+import { EventObserver } from '../Actions/NetworkRequests/SocketConnection/Observer';
 
 export class EgalConstructor extends Model {
-  private readonly egalModel: Model;
-  private egalObserver: EventObserver = EventObserver.getInstance();
+  egalModel: Model;
+  egalObserver: EventObserver = EventObserver.getInstance();
   modelName: string;
   username: string;
   password: string;
-  private readonly url: string;
-  private readonly connectionType: string;
+  url: string;
+  connectionType: string;
 
   constructor(modelParams: {
     modelName: string;
@@ -28,22 +28,17 @@ export class EgalConstructor extends Model {
     this.initModel();
   }
 
-  initModel() {
+  initModel(): any {
     this.egalModel.setBaseUrl(this.url);
     return this.egalModel;
   }
-  initModelObserver() {
+  initModelObserver(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.egalObserver.subscribe(
         this.modelName,
-        (
-          data: any,
-          actionName: string,
-          modelName: string,
-          actionMessage: object
-        ) => {
+        (data: any, actionName: string, modelName: string, actionMessage: object) => {
           let receivedData;
-          if (actionName !== "error") {
+          if (actionName !== 'error') {
             receivedData = [data[0], actionName, modelName, actionMessage];
             resolve(receivedData);
           } else {

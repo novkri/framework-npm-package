@@ -9,7 +9,7 @@ class GetItemsActionParams {
         this.filter = [];
         this.order = [];
         this.pagination = null;
-        this.id = "";
+        this.id = '';
     }
     /**
      * Функция формирует массив с выбранными пользователем with
@@ -17,10 +17,7 @@ class GetItemsActionParams {
      */
     with(withObj) {
         if (withObj) {
-            // @ts-ignore
-            Array.isArray(withObj)
-                ? (this.withs = withObj)
-                : this.withs.push(withObj);
+            Array.isArray(withObj) ? (this.withs = withObj) : this.withs.push(withObj);
         }
         else
             return undefined;
@@ -61,7 +58,7 @@ class GetItemsActionParams {
             filter: this.filter,
             withs: this.withs,
             order: this.order,
-            id: this.id,
+            id: this.id
         };
     }
 }

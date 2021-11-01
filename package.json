@@ -1,15 +1,16 @@
 {
   "name": "@egalteam/framework-react-native",
   "description": "Egal",
-  "main": "index.js",
-  "typings": "dist/index.d.ts",
+  "main": "compile/index.js",
+  "types": "compile/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc && node index.js",
     "watch-and-run": "tsc -w & nodemon -q -w src index.js",
     "dev:watch": "nodemon --watch ./src/**/* -e ts,tsx --exec ts-node index.ts",
     "serve": "vue-cli-service serve",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "build": "tsc -w"
   },
   "keywords": [
     "actions",
@@ -32,8 +33,9 @@
     "validatorjs": "^3.22.1"
   },
   "devDependencies": {
-    "@types/node": "^14.14.31",
+    "@types/node": "^14.17.21",
     "@types/uuid": "^8.3.0",
+    "@types/validatorjs": "^3.15.0",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",
     "axios": "^0.21.1",

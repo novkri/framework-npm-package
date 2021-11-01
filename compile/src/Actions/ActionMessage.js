@@ -11,7 +11,7 @@ class ActionMessage {
         this.actionName = actionName;
         this.actionParameters = actionParameters;
         this.channelParameters = channelParameters;
-        this.httpMethod = "POST";
+        this.httpMethod = 'POST';
         this.httpRequest = new HttpRequest_1.HttpRequest();
     }
     axiosConnect(constructorRequest) {
@@ -30,7 +30,7 @@ class ActionMessage {
                 .catch((error) => {
                 constructorRequest
                     ? reject(error.data.action_error ? error.data.action_error : error)
-                    : observer.broadcast(error, "error", this.modelName);
+                    : observer.broadcast(error, 'error', this.modelName);
             });
         });
     }
