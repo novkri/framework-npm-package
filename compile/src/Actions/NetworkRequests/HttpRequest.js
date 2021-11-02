@@ -9,8 +9,6 @@ const ActionError_1 = require("../ActionResponses/ActionError");
 const GlobalVariables_1 = require("../../GlobalVariables");
 let isRefreshing = false;
 let refreshSubscribers = [];
-let isUmtRefreshing = false;
-let refreshUmtSubscribers = [];
 let initialRequest = undefined;
 class HttpRequest {
     constructor() {
@@ -23,37 +21,30 @@ class HttpRequest {
     onRefreshed(token) {
         refreshSubscribers.map((cb) => cb(token));
     }
-    onUmtRefreshed(token) {
-        refreshUmtSubscribers.map((cb) => cb(token));
-    }
     refreshAccessToken(serviceName) {
         axios_1.default.interceptors.response.use((response) => {
             return response;
         }, (error) => {
             const { config } = error;
-            const originalRequest = config;
-            if (error.response.data.action_error.code === 401 &&
-                error.response.data.action_error.message === 'Token umt expired!') {
-                if (!isUmtRefreshing) {
-                    isUmtRefreshing = true;
-                    this.refreshMasterToken().then((newToken) => {
-                        isUmtRefreshing = false;
-                        this.onUmtRefreshed(newToken);
-                    });
-                }
-                return new Promise((resolve, reject) => {
-                    this.refreshAccessToken(serviceName).then((result) => {
-                        initialRequest.headers['Authorization'] = result;
-                        GlobalVariables_1.deleteCookie(serviceName);
-                        GlobalVariables_1.setCookie(serviceName, result)
-                            .then(() => {
-                            resolve(axios_1.default(initialRequest));
-                        })
-                            .catch((error) => {
-                            reject(error);
+            if (error.response.data.action_error.message === 'Token umt expired!') {
+                this.refreshMasterToken().then(() => {
+                    return new Promise((resolve, reject) => {
+                        this.refreshAccessToken(serviceName).then((result) => {
+                            initialRequest.headers['Authorization'] = result;
+                            GlobalVariables_1.deleteCookie(serviceName);
+                            GlobalVariables_1.setCookie(serviceName, result)
+                                .then(() => {
+                                resolve(axios_1.default(initialRequest));
+                            })
+                                .catch((error) => {
+                                reject(error);
+                            });
                         });
                     });
                 });
+            }
+            else {
+                return Promise.reject(error);
             }
         });
         return new Promise((resolve, reject) => {

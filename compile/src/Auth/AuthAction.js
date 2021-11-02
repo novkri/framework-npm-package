@@ -7,7 +7,6 @@ const GlobalVariables_1 = require('../GlobalVariables');
 let register = 'register';
 let auth = 'login';
 let loginIntoService = 'loginToService';
-let getRefreshToken = 'loginAndGetRefreshToken';
 class AuthAction {
   constructor(modelName, requestType) {
     this.microserviceName = 'auth';

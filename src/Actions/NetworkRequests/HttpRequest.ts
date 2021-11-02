@@ -6,8 +6,6 @@ import { getCookie, GlobalVariables, deleteCookie, setCookie } from '../../Globa
 
 let isRefreshing = false;
 let refreshSubscribers: any[] = [];
-let isUmtRefreshing = false;
-let refreshUmtSubscribers: any[] = [];
 let initialRequest: any = undefined;
 
 export class HttpRequest {
@@ -27,10 +25,6 @@ export class HttpRequest {
     refreshSubscribers.map((cb) => cb(token));
   }
 
-  onUmtRefreshed(token: any): void {
-    refreshUmtSubscribers.map((cb) => cb(token));
-  }
-
   refreshAccessToken(serviceName: string): Promise<any> {
     axios.interceptors.response.use(
       (response) => {
@@ -38,31 +32,24 @@ export class HttpRequest {
       },
       (error) => {
         const { config } = error;
-        const originalRequest = config;
-        if (
-          error.response.data.action_error.code === 401 &&
-          error.response.data.action_error.message === 'Token umt expired!'
-        ) {
-          if (!isUmtRefreshing) {
-            isUmtRefreshing = true;
-            this.refreshMasterToken().then((newToken) => {
-              isUmtRefreshing = false;
-              this.onUmtRefreshed(newToken);
-            });
-          }
-          return new Promise((resolve, reject) => {
-            this.refreshAccessToken(serviceName).then((result) => {
-              initialRequest.headers['Authorization'] = result;
-              deleteCookie(serviceName);
-              setCookie(serviceName, result)
-                .then(() => {
-                  resolve(axios(initialRequest));
-                })
-                .catch((error) => {
-                  reject(error);
-                });
+        if (error.response.data.action_error.message === 'Token umt expired!') {
+          this.refreshMasterToken().then(() => {
+            return new Promise((resolve, reject) => {
+              this.refreshAccessToken(serviceName).then((result) => {
+                initialRequest.headers['Authorization'] = result;
+                deleteCookie(serviceName);
+                setCookie(serviceName, result)
+                  .then(() => {
+                    resolve(axios(initialRequest));
+                  })
+                  .catch((error) => {
+                    reject(error);
+                  });
+              });
             });
           });
+        } else {
+          return Promise.reject(error);
         }
       }
     );
