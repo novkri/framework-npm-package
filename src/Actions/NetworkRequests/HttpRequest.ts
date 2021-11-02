@@ -19,10 +19,12 @@ export class HttpRequest {
 
   subscribeTokenRefresh(cb: any): void {
     refreshSubscribers.push(cb);
+    console.log(refreshSubscribers, 'subscribeTokenRefresh');
   }
 
   onRefreshed(token: any): void {
     refreshSubscribers.map((cb) => cb(token));
+    console.log(refreshSubscribers, 'onRefreshed');
   }
 
   refreshAccessToken(serviceName: string): Promise<any> {

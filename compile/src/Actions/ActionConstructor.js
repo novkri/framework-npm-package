@@ -13,12 +13,13 @@ class ActionConstructor {
         this.filterArr = [];
         this.ordersArr = [];
         this.withsArr = [];
-        this.microserviceName = "";
-        this.modelName = "";
-        this.actionName = "";
+        this.microserviceName = '';
+        this.modelName = '';
+        this.actionName = '';
+        this.calledAction = '';
         this.actionParams = [];
         this.pagination = { per_page: 10, page: 1 };
-        this.id = "";
+        this.id = '';
         this.url = url;
         this.setBaseUrl(this.url);
     }
@@ -28,19 +29,22 @@ class ActionConstructor {
     getMetadata(microserviceName, modelName) {
         this.microserviceName = microserviceName;
         this.modelName = modelName;
-        this.actionName = "getMetadata";
+        this.actionName = 'getMetadata';
+        this.calledAction = 'getMetadata';
         return this;
     }
     getItems(microserviceName, modelName) {
         this.microserviceName = microserviceName;
         this.modelName = modelName;
-        this.actionName = "getItems";
+        this.actionName = 'getItems';
+        this.calledAction = 'getItems';
         return this;
     }
     getItem(microserviceName, modelName, id) {
         this.microserviceName = microserviceName;
         this.modelName = modelName;
-        this.actionName = "getItem";
+        this.actionName = 'getItem';
+        this.calledAction = 'getItem';
         this.id = id;
         return this;
     }
@@ -48,49 +52,56 @@ class ActionConstructor {
         this.microserviceName = microserviceName;
         this.modelName = modelName;
         this.actionParams = actionParams;
-        this.actionName = "create";
+        this.actionName = 'create';
+        this.calledAction = 'create';
         return this;
     }
     update(microserviceName, modelName, actionParams) {
         this.microserviceName = microserviceName;
         this.modelName = modelName;
         this.actionParams = actionParams;
-        this.actionName = "update";
+        this.actionName = 'update';
+        this.calledAction = 'update';
         return this;
     }
     delete(microserviceName, modelName, actionParams) {
         this.microserviceName = microserviceName;
         this.modelName = modelName;
         this.actionParams = actionParams;
-        this.actionName = "delete";
+        this.actionName = 'delete';
+        this.calledAction = 'delete';
         return this;
     }
     createMany(microserviceName, modelName, actionParams) {
         this.microserviceName = microserviceName;
         this.modelName = modelName;
         this.actionParams = actionParams;
-        this.actionName = "createMany";
+        this.actionName = 'createMany';
+        this.calledAction = 'createMany';
         return this;
     }
     updateMany(microserviceName, modelName, actionParams) {
         this.microserviceName = microserviceName;
         this.modelName = modelName;
         this.actionParams = actionParams;
-        this.actionName = "updateMany";
+        this.actionName = 'updateMany';
+        this.calledAction = 'updateMany';
         return this;
     }
     updateManyWithFilter(microserviceName, modelName, actionParams) {
         this.microserviceName = microserviceName;
         this.modelName = modelName;
         this.actionParams = actionParams;
-        this.actionName = "updateManyRaw";
+        this.actionName = 'updateManyRaw';
+        this.calledAction = 'updateManyRaw';
         return this;
     }
     deleteManyWithFilter(microserviceName, modelName, actionParams) {
         this.microserviceName = microserviceName;
         this.modelName = modelName;
         this.actionParams = actionParams;
-        this.actionName = "deleteManyRaw";
+        this.actionName = 'deleteManyRaw';
+        this.calledAction = 'deleteManyRaw';
         return this;
     }
     custom(microserviceName, modelName, actionName, actionParams) {
@@ -98,12 +109,14 @@ class ActionConstructor {
         this.modelName = modelName;
         this.actionParams = actionParams;
         this.actionName = actionName;
+        this.calledAction = 'custom';
         return this;
     }
     getCount(microserviceName, modelName) {
         this.microserviceName = microserviceName;
         this.modelName = modelName;
-        this.actionName = "getCount";
+        this.actionName = 'getCount';
+        this.calledAction = 'getCount';
         return this;
     }
     filter(filterObject) {
@@ -132,13 +145,13 @@ class ActionConstructor {
                 filter: this.filterArr,
                 withs: this.withsArr,
                 order: this.ordersArr,
-                id: this.id,
+                id: this.id
             };
             GlobalVariables_1.GlobalVariables.tokenUST = this.microserviceName;
-            switch (this.actionName) {
-                case "getItems":
-                case "getItem":
-                case "getCount":
+            switch (this.calledAction) {
+                case 'getItems':
+                case 'getItem':
+                case 'getCount':
                     result = new GetItemsAction_1.GetItemsAction(this.microserviceName, this.modelName, this.actionName, actionParameters)
                         .axiosConnect(true)
                         .then((data) => {
@@ -148,7 +161,7 @@ class ActionConstructor {
                         reject(error);
                     });
                     break;
-                case "getMetadata":
+                case 'getMetadata':
                     result = new GetModelMetadataAction_1.GetModelMetadataAction(this.microserviceName, this.actionName, this.modelName)
                         .axiosConnect(true)
                         .then((data) => {
@@ -158,7 +171,7 @@ class ActionConstructor {
                         reject(error);
                     });
                     break;
-                case "custom":
+                case 'custom':
                     result = new CustomAction_1.CustomAction(this.microserviceName, this.modelName, this.actionName, this.actionParams)
                         .axiosConnect(true)
                         .then((data) => {
