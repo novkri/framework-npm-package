@@ -6,6 +6,9 @@ import { getCookie, GlobalVariables, deleteCookie, setCookie } from '../../Globa
 
 let isRefreshing = false;
 let refreshSubscribers: any[] = [];
+let isUmtRefreshing = false;
+let refreshUmtSubscribers: any[] = [];
+let initialRequest: any = undefined;
 
 export class HttpRequest {
   actionResult: ActionResult;
@@ -24,9 +27,47 @@ export class HttpRequest {
     refreshSubscribers.map((cb) => cb(token));
   }
 
+  onUmtRefreshed(token: any): void {
+    refreshUmtSubscribers.map((cb) => cb(token));
+  }
+
   refreshAccessToken(serviceName: string): Promise<any> {
+    axios.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        const { config } = error;
+        const originalRequest = config;
+        if (
+          error.response.data.action_error.code === 401 &&
+          error.response.data.action_error.message === 'Token umt expired!'
+        ) {
+          if (!isUmtRefreshing) {
+            isUmtRefreshing = true;
+            this.refreshMasterToken().then((newToken) => {
+              isUmtRefreshing = false;
+              this.onUmtRefreshed(newToken);
+            });
+          }
+          return new Promise((resolve, reject) => {
+            this.refreshAccessToken(serviceName).then((result) => {
+              initialRequest.headers['Authorization'] = result;
+              deleteCookie(serviceName);
+              setCookie(serviceName, result)
+                .then(() => {
+                  resolve(axios(initialRequest));
+                })
+                .catch((error) => {
+                  reject(error);
+                });
+            });
+          });
+        }
+      }
+    );
     return new Promise((resolve, reject) => {
-      if (sessionStorage.getItem('umt')) {
+      if (localStorage.getItem('umt')) {
         let domain = GlobalVariables.httpBaseUrl
           ? GlobalVariables.httpBaseUrl
           : GlobalVariables.authBaseUrl;
@@ -37,10 +78,39 @@ export class HttpRequest {
           method: 'POST',
           data: {
             service_name: serviceName,
-            token: sessionStorage.getItem('umt')
+            token: localStorage.getItem('umt')
           }
         })
           .then((response) => {
+            resolve(response.data.action_result.data);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      } else {
+        reject(new ActionError('Session expired!', 401).getMessage());
+      }
+    });
+  }
+
+  refreshMasterToken() {
+    return new Promise((resolve, reject) => {
+      if (localStorage.getItem('umrt')) {
+        let domain = GlobalVariables.httpBaseUrl;
+        delete axios.defaults.headers.Authorization;
+        axios({
+          url: `${domain}/auth/User/refreshUserMasterToken`,
+          method: 'POST',
+          data: {
+            token: localStorage.getItem('umrt')
+          }
+        })
+          .then((response: any) => {
+            localStorage.setItem(
+              'umrt',
+              response.data.action_result.data.user_master_refresh_token
+            );
+            localStorage.setItem('umt', response.data.action_result.data.user_master_token);
             resolve(response.data.action_result.data);
           })
           .catch((error) => {
@@ -66,9 +136,10 @@ export class HttpRequest {
     let userTokenName = tokenName ? tokenName : GlobalVariables.tokenUST;
     let instance = axios.create();
     if (
-      actionName !== 'registerByEmailAndPassword' &&
-      actionName !== 'loginByEmailAndPassword' &&
-      actionName !== 'loginToService'
+      actionName !== 'register' &&
+      actionName !== 'login' &&
+      actionName !== 'loginToService' &&
+      actionName !== 'loginAndGetRefreshToken'
     ) {
       instance.defaults.headers.common['Authorization'] = getCookie(userTokenName);
     }
@@ -79,9 +150,10 @@ export class HttpRequest {
       (error) => {
         const { config } = error;
         const originalRequest = config;
+        initialRequest = originalRequest;
         if (
           error.response.data.action_error.code === 401 &&
-          error.response.data.action_error.message === 'Token expired!'
+          error.response.data.action_error.message === 'Token ust expired!'
         ) {
           if (!isRefreshing) {
             isRefreshing = true;
@@ -112,9 +184,10 @@ export class HttpRequest {
     return new Promise((resolve, reject) => {
       let data;
       switch (actionName) {
-        case 'registerByEmailAndPassword':
-        case 'loginByEmailAndPassword':
+        case 'register':
+        case 'login':
         case 'loginToService':
+        case 'loginAndGetRefreshToken':
         case 'getItems':
         case 'getItem':
         case 'delete':

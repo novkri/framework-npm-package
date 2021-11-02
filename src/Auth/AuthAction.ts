@@ -4,10 +4,10 @@ import { AuthParams } from './AuthParams';
 import { GlobalVariables } from '../GlobalVariables';
 import { ActionParameters } from '../Actions/Interfaces/ActionParameters';
 
-let register = 'registerByEmailAndPassword';
-let auth = 'loginByEmailAndPassword';
+let register = 'register';
+let auth = 'login';
 let loginIntoService = 'loginToService';
-
+let getRefreshToken = 'loginAndGetRefreshToken';
 export class AuthAction {
   private microserviceName: string;
   private modelName: string;
@@ -82,7 +82,8 @@ export class AuthAction {
     return new Promise((resolve, reject) => {
       this.setNetworkRequest(createdUserData, auth)
         .then((data: any) => {
-          sessionStorage.setItem('umt', data[0]);
+          localStorage.setItem('umt', data[0].user_master_token);
+          localStorage.setItem('umrt', data[0].user_master_refresh_token);
           resolve(data);
         })
         .catch((error) => {
