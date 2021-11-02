@@ -250,7 +250,7 @@ declare class ActionConstructor {
         actionParams: object
     ): this
     getCount(microserviceName: string, modelName: string): this
-    filter(filterObject: (string | object)[]): this
+    filter(filterObject: (string | object)[], cutom?: strin|undefined): this
     withs(withs: Array<string>): this
     order(orders: string[][] | undefined): this
     setPagination(perPage: number, page: number): this
@@ -415,7 +415,7 @@ interface ActionConstructorInterface {
         actionParams: object
     ): this;
     getCount(microserviceName: string, modelName: string): this;
-    filter(filterObject: object): this;
+    filter(filterObject: object, custom?:string): this;
     withs(withs: Array<string>): this;
     order(orders: string[][] | undefined): this;
     setPagination(perPage: number, page: number): this;
