@@ -157,8 +157,8 @@ export class HttpRequest {
               deleteCookie(serviceName);
               setCookie(serviceName, token)
                 .then(() => {
-                  refreshSubscribers = [];
                   resolve(instance(originalRequest));
+                  refreshSubscribers = [];
                 })
                 .catch((error) => {
                   reject(error);

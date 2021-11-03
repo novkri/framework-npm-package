@@ -7,7 +7,6 @@ import { ActionParameters } from '../Actions/Interfaces/ActionParameters';
 let register = 'register';
 let auth = 'login';
 let loginIntoService = 'loginToService';
-let getRefreshToken = 'loginAndGetRefreshToken';
 export class AuthAction {
   private microserviceName: string;
   private modelName: string;

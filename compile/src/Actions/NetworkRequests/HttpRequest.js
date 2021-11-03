@@ -135,8 +135,8 @@ class HttpRequest {
                         GlobalVariables_1.deleteCookie(serviceName);
                         GlobalVariables_1.setCookie(serviceName, token)
                             .then(() => {
-                            refreshSubscribers = [];
                             resolve(instance(originalRequest));
+                            refreshSubscribers = [];
                         })
                             .catch((error) => {
                             reject(error);
