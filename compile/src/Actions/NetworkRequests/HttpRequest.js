@@ -17,11 +17,9 @@ class HttpRequest {
     }
     subscribeTokenRefresh(cb) {
         refreshSubscribers.push(cb);
-        console.log(refreshSubscribers, 'subscribeTokenRefresh');
     }
     onRefreshed(token) {
         refreshSubscribers.map((cb) => cb(token));
-        console.log(refreshSubscribers, 'onRefreshed');
     }
     refreshAccessToken(serviceName) {
         axios_1.default.interceptors.response.use((response) => {
