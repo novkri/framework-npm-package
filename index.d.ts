@@ -334,7 +334,7 @@ declare class Model {
         withs?: string | string[],
         orders?: string[][],
         actionName?: string
-    ):any
+    ):void
     actionGetItem(
         microserviceName: string,
         connectionType: string,
@@ -342,20 +342,20 @@ declare class Model {
         filter?: (string | object)[] | undefined,
         withs?: [],
         orders?: string[][]
-    ):any
+    ):void
     actionUpdate(microserviceName: string, connectionType: string, actionParams: object):any
     actionUpdateMany(microserviceName: string, connectionType: string, actionParams: object):any
     actionUpdateManyWithFilter(
         microserviceName: string,
         connectionType: string,
         actionParams: object
-    ):any
+    ):void
     actionCreate(
         microserviceName: string,
         connectionType: string,
         actionParams: object,
         channelParameters?: RoutingKeyParams
-    ):any
+    ):void
     actionCreateMany(microserviceName: string, connectionType: string, actionParams: object):void
     actionDelete(microserviceName: string, connectionType: string, actionParams: string[]):void
     actionDeleteMany(microserviceName: string, connectionType: string, actionParams: string[]):void
@@ -363,21 +363,13 @@ declare class Model {
         microserviceName: string,
         connectionType: string,
         actionParams: object
-    ):any
+    ):void
     actionCustom(
         microserviceName: string,
         actionName: string,
         connectionType: string,
         actionParams?: object
-    ):any
-    getModelMetadata():any
-    getModelActionList():any
-    getModelValidationRules():any
-    getModelActionsMetaData():any
-    getModelDataBaseFields():any
-    getModelFieldsWithTypes():any
-    getItems():any
-    getAllModelsMetadata():any
+    ):void
     setBaseUrl(URL: string, connectionType: string):void
     socketDisconnect():any
 }

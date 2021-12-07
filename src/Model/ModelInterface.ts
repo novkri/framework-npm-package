@@ -51,18 +51,6 @@ export interface ModelInterface {
     actionParams?: object
   ): any;
 
-  getModelMetadata(): any;
-
-  getModelActionList(): any;
-
-  getModelValidationRules(): any;
-
-  getModelActionsMetaData(): any;
-
-  getModelDataBaseFields(): any;
-
-  getModelFieldsWithTypes(): any;
-
   actionUpdateManyWithFilter(
     microserviceName: string,
     connectionType: string,
@@ -74,12 +62,6 @@ export interface ModelInterface {
     connectionType: string,
     actionParams: object
   ): any;
-
-  // getSpecificFields(
-  //   fields: string[],
-  //   filterType: string,
-  //   dataToFilter: string | object | object[]
-  // ): void;
 
   setBaseUrl(URL: string, connectionType: string): any;
 }

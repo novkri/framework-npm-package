@@ -189,7 +189,7 @@ export class ActionConstructor implements ActionConstructorInterface {
             this.actionName,
             actionParameters
           )
-            .axiosConnect(true)
+            .axiosConnect()
             .then((data) => {
               resolve(data);
             })
@@ -203,7 +203,7 @@ export class ActionConstructor implements ActionConstructorInterface {
             this.actionName,
             this.modelName
           )
-            .axiosConnect(true)
+            .axiosConnect()
             .then((data) => {
               resolve(data);
             })
@@ -218,7 +218,7 @@ export class ActionConstructor implements ActionConstructorInterface {
             this.actionName,
             this.actionParams
           )
-            .axiosConnect(true)
+            .axiosConnect()
             .then((data) => {
               resolve(data);
             })
@@ -233,7 +233,7 @@ export class ActionConstructor implements ActionConstructorInterface {
             this.actionName,
             this.actionParams
           )
-            .axiosConnect(true)
+            .axiosConnect()
             .then((data) => {
               resolve(data);
             })
