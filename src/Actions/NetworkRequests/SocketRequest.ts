@@ -70,7 +70,6 @@ export class SocketRequest {
       let routingKey: string;
       domain = GlobalVariables.socketBaseUrl;
       options = JSON.stringify(this.options);
-
       routingKey =
         this.serviceName + '.' + this.modelName + '.' + this.actionName + '.' + this.type;
       let topicKey = routingKey.toString();
