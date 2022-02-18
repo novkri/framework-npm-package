@@ -241,6 +241,7 @@ declare class ActionConstructor {
     delete(microserviceName: string, modelName: string, actionParams: object): this
     createMany(microserviceName: string, modelName: string, actionParams: object): this
     updateMany(microserviceName: string, modelName: string, actionParams: object): this
+    deleteMany(microserviceName: string, modelName: string, actionParams: object): this
     updateManyWithFilter(microserviceName: string, modelName: string, actionParams: object): this
     deleteManyWithFilter(microserviceName: string, modelName: string, actionParams: object): this
     custom(
@@ -404,6 +405,7 @@ interface ActionConstructorInterface {
     create(microserviceName: string, modelName: string, actionParams: object): this;
     update(microserviceName: string, modelName: string, actionParams: object): this;
     delete(microserviceName: string, modelName: string, actionParams: object): this;
+    deleteMany(microserviceName: string, modelName: string, actionParams: object): this;
     createMany(microserviceName: string, modelName: string, actionParams: object): this;
     updateMany(microserviceName: string, modelName: string, actionParams: object): this;
     updateManyWithFilter(microserviceName: string, modelName: string, actionParams: object): this;
@@ -562,6 +564,8 @@ declare const setCookie:any;
 declare const getCookie:any;
 declare const deleteAllCookies:any;
 declare const deleteCookie:any;
+declare const setUmrt: any;
+declare const deleteUmrt: any;
 declare let isRefreshing:boolean;
 declare let refreshSubscribers: any[];
 declare let register:string;

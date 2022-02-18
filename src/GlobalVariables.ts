@@ -46,3 +46,19 @@ export const deleteCookie = function (name: string) {
     return error;
   }
 };
+
+export const setUmrt = function(token: string) {
+  try {
+    return storage.set('umrt', token);
+  } catch (error) {
+    return error;
+  }
+}
+
+export const deleteUmrt = function() {
+  try {
+    return storage.delete('umrt');
+  } catch (error) {
+    return error;
+  }
+}
