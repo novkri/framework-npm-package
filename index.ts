@@ -20,7 +20,9 @@ import {
   getCookie,
   deleteCookie,
   deleteAllCookies,
-  decipherJWT
+  decipherJWT,
+  setUmrt,
+  deleteUmrt
 } from './src/GlobalVariables';
 
 export default {
@@ -45,7 +47,9 @@ export default {
   getCookie,
   deleteCookie,
   deleteAllCookies,
-  decipherJWT
+  decipherJWT,
+  deleteUmrt,
+  setUmrt
 };
 
 export {
@@ -70,5 +74,7 @@ export {
   getCookie,
   deleteCookie,
   deleteAllCookies,
-  decipherJWT
+  decipherJWT,
+  deleteUmrt,
+  setUmrt
 };

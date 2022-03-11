@@ -5,7 +5,6 @@ declare class ActionError {
 
     code: number | undefined;
     message: string;
-
     getMessage(): string;
 }
 
