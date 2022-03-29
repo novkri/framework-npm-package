@@ -62,3 +62,19 @@ export const deleteUmrt = function() {
     return error;
   }
 }
+
+export const setUmt = function(token: string) {
+  try {
+    return storage.set('umt', token);
+  } catch (error) {
+    return error;
+  }
+}
+
+export const deleteUmt = function() {
+  try {
+    return storage.delete('umt');
+  } catch (error) {
+    return error;
+  }
+}

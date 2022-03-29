@@ -565,6 +565,8 @@ declare const deleteAllCookies:any;
 declare const deleteCookie:any;
 declare const setUmrt: any;
 declare const deleteUmrt: any;
+declare const setUmt: any;
+declare const deleteUmt: any;
 declare let isRefreshing:boolean;
 declare let refreshSubscribers: any[];
 declare let register:string;
