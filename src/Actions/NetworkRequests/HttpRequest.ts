@@ -26,8 +26,6 @@ export class HttpRequest {
     }
 
     async refreshAccessToken(serviceName: string) {
-        console.log('refresh access token')
-        let newToken = ''
         axios.interceptors.response.use(
             (response) => {
                 return response;
@@ -35,34 +33,27 @@ export class HttpRequest {
             async (error) => {
                 const {config} = error;
                 if (error.response.data.action_error.internal_code === 'umt_expired') {
-                    console.log('error umt expired')
                     this.refreshMasterToken().then(() => {
-                        console.log('master token refreshed')
                         this.refreshAccessToken(serviceName).then(() => {
-                            initialRequest.headers['Authorization'] = newToken;
-                            deleteCookie(serviceName);
-                            setCookie(serviceName, newToken)
-                                .then(() => {
-                                    axios(initialRequest);
-                                })
-                                .catch((error) => {
-                                    return error;
-                                });
+                            initialRequest.headers['Authorization'] = getCookie(serviceName);
+                            axios(initialRequest);
+                            refreshSubscribers = [];
                         })
+                    }).catch((error) => {
+                        return error
                     })
                 } else {
-                    return Promise.reject(error);
+                    return error;
                 }
             }
         );
-        if (localStorage.getItem('umt')) {
-            console.log('axios request update ust')
+        if (localStorage.getItem('umt') && localStorage.getItem('umrt')) {
             let domain = GlobalVariables.httpBaseUrl
                 ? GlobalVariables.httpBaseUrl
                 : GlobalVariables.authBaseUrl;
             delete axios.defaults.headers.Authorization;
             deleteCookie(serviceName);
-            axios({
+            await axios({
                 url: `${domain}/auth/User/loginToService`,
                 method: 'POST',
                 data: {
@@ -71,8 +62,8 @@ export class HttpRequest {
                 }
             })
                 .then((response) => {
-                    console.log(response.data.action_result.data, 'response data')
-                    newToken = response.data.action_result.data
+                    deleteCookie(serviceName);
+                    setCookie(serviceName, response.data.action_result.data)
                     this.onRefreshed(response.data.action_result.data)
                     return response.data.action_result.data;
                 })
@@ -84,12 +75,11 @@ export class HttpRequest {
 
     async refreshMasterToken() {
         if (localStorage.getItem('umrt')) {
-            console.log('axios request update umt')
             let domain = GlobalVariables.httpBaseUrl
                 ? GlobalVariables.httpBaseUrl
                 : GlobalVariables.authBaseUrl;
             delete axios.defaults.headers.Authorization;
-            axios({
+            await axios({
                 url: `${domain}/auth/User/refreshUserMasterToken`,
                 method: 'POST',
                 data: {
@@ -102,12 +92,12 @@ export class HttpRequest {
                         response.data.action_result.data.user_master_refresh_token
                     );
                     localStorage.setItem('umt', response.data.action_result.data.user_master_token);
-                    return response.data.action_result.data
                 })
                 .catch((error) => {
+                    localStorage.removeItem('umrt')
                     return error;
                 });
-        } else  {
+        } else {
             return new ActionError('Session expired!', 401).getMessage()
         }
     }
@@ -146,7 +136,6 @@ export class HttpRequest {
                     error.response.data.action_error.internal_code === 'ust_expired'
                 ) {
                     if (!isRefreshing) {
-                        console.log('error ust expired')
                         isRefreshing = true;
                         this.refreshAccessToken(serviceName).then(() => {
                             isRefreshing = false;
@@ -190,6 +179,7 @@ export class HttpRequest {
                 case 'createMany':
                 case 'updateMany':
                     const actionManyParams = {objects: {}};
+
                     // @ts-ignore
                     actionManyParams.objects = actionParameters;
                     data = actionManyParams;
