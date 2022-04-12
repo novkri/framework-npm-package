@@ -1,8 +1,8 @@
-import axios, { Method } from 'axios';
-import { ActionResult } from '../ActionResponses/ActionResult';
-import { ActionError } from '../ActionResponses/ActionError';
-import { ActionParameters } from '../Interfaces/ActionParameters';
-import { getCookie, GlobalVariables, deleteCookie, setCookie } from '../../GlobalVariables';
+import axios, {Method} from 'axios';
+import {ActionResult} from '../ActionResponses/ActionResult';
+import {ActionError} from '../ActionResponses/ActionError';
+import {ActionParameters} from '../Interfaces/ActionParameters';
+import {getCookie, GlobalVariables, deleteCookie, setCookie} from '../../GlobalVariables';
 import storage from '../../MMKVStorage';
 let isRefreshing = false;
 let refreshSubscribers: any[] = [];
@@ -25,145 +25,140 @@ export class HttpRequest {
     refreshSubscribers.map((cb) => cb(token));
   }
 
-  refreshAccessToken(serviceName: string): Promise<any> {
+  async refreshAccessToken(serviceName: string) {
     axios.interceptors.response.use(
-      (response) => {
-        return response;
-      },
-      (error) => {
-        const { config } = error;
-        if (error.response.data.action_error.internal_code === 'umt_expired') {
-          this.refreshMasterToken().then(() => {
-            return new Promise((resolve, reject) => {
-              this.refreshAccessToken(serviceName).then((result) => {
-                initialRequest.headers['Authorization'] = result;
-                deleteCookie(serviceName);
-                setCookie(serviceName, result)
-                  .then(() => {
-                    resolve(axios(initialRequest));
-                  })
-                  .catch((error) => {
-                    reject(error);
-                  });
-              });
-            });
-          });
-        } else {
-          return Promise.reject(error);
+        (response) => {
+          return response;
+        },
+        async (error) => {
+          const {config} = error;
+          if (error.response.data.action_error.internal_code === 'umt_expired') {
+            this.refreshMasterToken().then(() => {
+              this.refreshAccessToken(serviceName).then(() => {
+                initialRequest.headers['Authorization'] = getCookie(serviceName);
+                axios(initialRequest);
+                refreshSubscribers = [];
+              })
+            }).catch((error) => {
+              return error
+            })
+          } else {
+            return error;
+          }
         }
-      }
     );
-    return new Promise((resolve, reject) => {
-      if (storage.getString('umt')) {
-        let domain = GlobalVariables.httpBaseUrl
+    if (storage.getString('umt') && storage.getString('umrt')) {
+      let domain = GlobalVariables.httpBaseUrl
           ? GlobalVariables.httpBaseUrl
           : GlobalVariables.authBaseUrl;
-        delete axios.defaults.headers.Authorization;
-        deleteCookie(serviceName);
-        axios({
-          url: `${domain}/auth/User/loginToService`,
-          method: 'POST',
-          data: {
-            service_name: serviceName,
-            token: storage.getString('umt')
-          }
-        })
+      delete axios.defaults.headers.Authorization;
+      deleteCookie(serviceName);
+      await axios({
+        url: `${domain}/auth/User/loginToService`,
+        method: 'POST',
+        data: {
+          service_name: serviceName,
+          token: storage.getString('umt')
+        }
+      })
           .then((response) => {
-            resolve(response.data.action_result.data);
+            deleteCookie(serviceName);
+            setCookie(serviceName, response.data.action_result.data)
+            this.onRefreshed(response.data.action_result.data)
+            return response.data.action_result.data;
           })
           .catch((error) => {
-            reject(error);
+            return error;
           });
-      } else {
-        reject(new ActionError('Session expired!', 401).getMessage());
-      }
-    });
+    }
   }
 
-  refreshMasterToken() {
-    return new Promise((resolve, reject) => {
-      if (storage.getString('umrt')) {
-        let domain = GlobalVariables.httpBaseUrl;
-        delete axios.defaults.headers.Authorization;
-        axios({
-          url: `${domain}/auth/User/refreshUserMasterToken`,
-          method: 'POST',
-          data: {
-            token: storage.getString('umrt')
-          }
-        })
+  async refreshMasterToken() {
+    if (storage.getString('umrt')) {
+      let domain = GlobalVariables.httpBaseUrl
+          ? GlobalVariables.httpBaseUrl
+          : GlobalVariables.authBaseUrl;
+      delete axios.defaults.headers.Authorization;
+      await axios({
+        url: `${domain}/auth/User/refreshUserMasterToken`,
+        method: 'POST',
+        data: {
+          token: storage.getString('umrt')
+        }
+      })
           .then((response: any) => {
-            storage.set('umrt', response.data.action_result.data.user_master_refresh_token);
+            storage.set(
+                'umrt',
+                response.data.action_result.data.user_master_refresh_token
+            );
             storage.set('umt', response.data.action_result.data.user_master_token);
-            resolve(response.data.action_result.data);
           })
           .catch((error) => {
-            reject(error);
+            storage.delete('umrt')
+            return error;
           });
-      } else {
-        reject(new ActionError('Session expired!', 401).getMessage());
-      }
-    });
+    } else {
+      return new ActionError('Session expired!', 401).getMessage()
+    }
   }
 
   axiosConnect(
-    serviceName: string,
-    modelName: string,
-    actionName: string,
-    httpMethod: Method,
-    actionParameters: ActionParameters | undefined,
-    tokenName?: string
+      serviceName: string,
+      modelName: string,
+      actionName: string,
+      httpMethod: Method,
+      actionParameters: ActionParameters | undefined,
+      tokenName?: string
   ): Promise<any> {
     let domain = GlobalVariables.httpBaseUrl
-      ? GlobalVariables.httpBaseUrl
-      : GlobalVariables.authBaseUrl;
+        ? GlobalVariables.httpBaseUrl
+        : GlobalVariables.authBaseUrl;
     let userTokenName = tokenName ? tokenName : GlobalVariables.tokenUST;
     let instance = axios.create();
     if (
-      actionName !== 'register' &&
-      actionName !== 'login' &&
-      actionName !== 'loginToService' &&
-      actionName !== 'loginAndGetRefreshToken'
+        actionName !== 'register' &&
+        actionName !== 'login' &&
+        actionName !== 'loginToService' &&
+        actionName !== 'loginAndGetRefreshToken'
     ) {
       instance.defaults.headers.common['Authorization'] = getCookie(userTokenName);
     }
     instance.interceptors.response.use(
-      (response) => {
-        return response;
-      },
-      (error) => {
-        const { config } = error;
-        const originalRequest = config;
-        initialRequest = originalRequest;
-        if (
-          error.response.data.action_error.code === 401 &&
-          error.response.data.action_error.internal_code === 'ust_expired'
-        ) {
-          if (!isRefreshing) {
-            isRefreshing = true;
-            this.refreshAccessToken(serviceName).then((newToken) => {
-              isRefreshing = false;
-              this.onRefreshed(newToken);
+        (response) => {
+          return response;
+        },
+        async (error) => {
+          const {config} = error;
+          const originalRequest = config;
+          initialRequest = originalRequest;
+          if (
+              error.response.data.action_error.code === 401 &&
+              error.response.data.action_error.internal_code === 'ust_expired'
+          ) {
+            if (!isRefreshing) {
+              isRefreshing = true;
+              this.refreshAccessToken(serviceName).then(() => {
+                isRefreshing = false;
+              })
+            }
+            return new Promise((resolve, reject) => {
+              this.subscribeTokenRefresh((token: any) => {
+                originalRequest.headers['Authorization'] = token;
+                deleteCookie(serviceName);
+                setCookie(serviceName, token)
+                    .then(() => {
+                      resolve(instance(originalRequest));
+                      refreshSubscribers = [];
+                    })
+                    .catch((error) => {
+                      reject(error);
+                    });
+              });
             });
+          } else {
+            return Promise.reject(error);
           }
-          return new Promise((resolve, reject) => {
-            this.subscribeTokenRefresh((token: any) => {
-              originalRequest.headers['Authorization'] = token;
-              deleteCookie(serviceName);
-              setCookie(serviceName, token)
-                .then(() => {
-                  resolve(instance(originalRequest));
-                  refreshSubscribers = [];
-                })
-                .catch((error) => {
-                  reject(error);
-                });
-            });
-          });
-        } else {
-          return Promise.reject(error);
         }
-      }
     );
     return new Promise((resolve, reject) => {
       let data;
@@ -183,13 +178,14 @@ export class HttpRequest {
           break;
         case 'createMany':
         case 'updateMany':
-          const actionManyParams = { objects: {} };
+          const actionManyParams = {objects: {}};
+
           // @ts-ignore
           actionManyParams.objects = actionParameters;
           data = actionManyParams;
           break;
         default:
-          const parameters = { attributes: {} };
+          const parameters = {attributes: {}};
           // @ts-ignore
           parameters.attributes = actionParameters;
           data = parameters;
@@ -200,12 +196,12 @@ export class HttpRequest {
           method: httpMethod,
           data: data
         })
-          .then((response) => {
-            resolve(response);
-          })
-          .catch((error) => {
-            reject(error.response);
-          });
+            .then((response) => {
+              resolve(response);
+            })
+            .catch((error) => {
+              reject(error.response);
+            });
       } else {
         this.actionError = new ActionError('Укажите URL!');
         reject(this.actionError.getMessage());
