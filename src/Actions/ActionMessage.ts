@@ -56,6 +56,8 @@ export class ActionMessage implements ActionMessageInterface {
           if('data' in error) {
             if('action_error' in error.data) {
               returnError = error.data.action_error
+            } else {
+              returnError = error
             }
           } else {
             returnError = error
