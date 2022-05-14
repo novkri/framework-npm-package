@@ -109,6 +109,7 @@ export class HttpRequest {
         actionName: string,
         httpMethod: Method,
         actionParameters: ActionParameters | undefined,
+        customActionParameters?: any,
         tokenName?: string
     ): Promise<any> {
         let domain = GlobalVariables.httpBaseUrl
@@ -192,10 +193,7 @@ export class HttpRequest {
                     data = actionManyParams;
                     break;
                 default:
-                    const parameters = {attributes: {}};
-                    // @ts-ignore
-                    parameters.attributes = actionParameters;
-                    data = parameters;
+                    data = {attributes: actionParameters, ...customActionParameters};
             }
             if (GlobalVariables.httpBaseUrl || GlobalVariables.authBaseUrl) {
                 instance({
