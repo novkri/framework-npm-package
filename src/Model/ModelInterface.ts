@@ -48,7 +48,8 @@ export interface ModelInterface {
     microserviceName: string,
     actionName: string,
     connectionType: string,
-    actionParams?: object
+    actionParams?: object,
+    additionalParams?: any
   ): any;
 
   getModelMetadata(): any;
