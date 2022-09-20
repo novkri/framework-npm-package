@@ -11,6 +11,7 @@ import {ModelConnection} from './ModelConnection';
 
 const observer: EventObserver = EventObserver.getInstance();
 
+// @ts-ignore
 export class Model implements ModelInterface {
   modelName: string;
   username: string;
