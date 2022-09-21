@@ -37,5 +37,4 @@ export interface ActionConstructorInterface {
   order(orders: string[][] | undefined): this;
 
   setPagination(perPage: number, page: number): this;
-
 }

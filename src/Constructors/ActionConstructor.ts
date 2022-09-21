@@ -6,7 +6,6 @@ import {CRUDAction} from '../Actions/CRUDActions/CRUDAction';
 import {GetModelMetadataAction} from '../Actions/GetMetadataAction/GetModelMetadataAction';
 import {CustomAction} from '../Actions/CustomAction/CustomAction';
 import {GetItemsAction} from '../Actions/GetItemsAction/GetItemsAction';
-import globalAxios from "../AxiosInstance";
 
 export class ActionConstructor implements ActionConstructorInterface {
     filterArr: (string | object)[];
