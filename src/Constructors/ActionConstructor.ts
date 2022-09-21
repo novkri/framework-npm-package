@@ -42,22 +42,7 @@ export class ActionConstructor implements ActionConstructorInterface {
         GlobalVariables.httpBaseUrl = url;
     }
 
-    setErrorInterceptor(errorText: string | number, callback: (...args: any) => any): void {
-        globalAxios.interceptors.response.use(
-            (response) => {
-                return response;
-            },
-            (error: any) => {
-                if (
-                    error.response.data.action_error.code === errorText ||
-                    error.response.data.action_error.message === errorText
-                ) {
-                    callback();
-                }
-                return Promise.reject(error);
-            }
-        );
-    }
+
 
     clearParams(): void {
         this.filterArr = [];

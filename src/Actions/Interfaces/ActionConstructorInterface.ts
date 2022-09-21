@@ -38,5 +38,4 @@ export interface ActionConstructorInterface {
 
   setPagination(perPage: number, page: number): this;
 
-  setErrorInterceptor(errorText: string | number, callback: (...args: any) => any): void
 }
