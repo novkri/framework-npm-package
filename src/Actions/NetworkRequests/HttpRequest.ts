@@ -151,8 +151,8 @@ export class HttpRequest {
                     return new Promise((resolve, reject) => {
                         this.subscribeTokenRefresh((newToken: any) => {
                             originalRequest.headers['Authorization'] = getCookie(requestServiceName);
-                                    resolve(globalAxios(originalRequest));
-                                    refreshSubscribers = [];
+                                resolve(globalAxios(originalRequest));
+                                refreshSubscribers = [];
                         });
                     });
                 } else {
